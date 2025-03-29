@@ -1,10 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { html as htmlLanguage } from '@codemirror/lang-html';
-import { css as cssLanguage } from '@codemirror/lang-css';
-import { javascript as jsLanguage } from '@codemirror/lang-javascript';
+import { html } from '@codemirror/lang-html';
+import { css } from '@codemirror/lang-css';
+import { javascript } from '@codemirror/lang-javascript';
 import { EditorView } from '@codemirror/view';
-import { oneDark } from '@codemirror/theme-one-dark';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
@@ -12,7 +12,6 @@ import {
   ResizablePanel, 
   ResizablePanelGroup 
 } from '@/components/ui/resizable';
-import { cn } from '@/lib/utils';
 import { 
   Cog, 
   Play, 
@@ -21,11 +20,15 @@ import {
   Copy, 
   Code2, 
   Palette, 
-  FileCode2 
+  FileCode2,
+  Save,
+  Upload,
+  AlertCircle
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import EditorHeader from './EditorHeader';
 import { useIsMobile } from '@/hooks/use-mobile';
+import EditorStatusBar from './EditorStatusBar';
 
 // Default code examples
 const DEFAULT_HTML = `<!DOCTYPE html>
@@ -58,7 +61,7 @@ p {
 }
 
 button {
-  background-color: #4CAF50;
+  background-color: #C8102E;
   color: white;
   padding: 10px 15px;
   border: none;
@@ -69,7 +72,7 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #003893;
 }`;
 
 const DEFAULT_JS = `// Wait for the DOM to be fully loaded
@@ -86,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Change the color of the heading
     const heading = document.querySelector('h1');
-    heading.style.color = '#ff6347';
+    heading.style.color = '#C8102E';
   });
 });`;
 
@@ -103,17 +106,55 @@ const editorTheme = EditorView.theme({
     minHeight: '100%',
   },
   '.cm-gutters': {
-    backgroundColor: '#282a36',
-    color: '#6272a4',
+    backgroundColor: '#f5f5f5',
+    color: '#444',
     border: 'none',
   },
   '.cm-activeLine': { 
-    backgroundColor: '#44475a70'
+    backgroundColor: '#e6f0ff70'
   },
   '.cm-activeLineGutter': {
-    backgroundColor: '#44475a70'
+    backgroundColor: '#e6f0ff70'
+  },
+  '.cm-content': {
+    color: '#000' // Setting text color to black
   }
 });
+
+// Basic HTML validator
+const validateHTML = (code: string) => {
+  const errors = [];
+  
+  // Check for mismatched tags (very basic check)
+  const openTags = [];
+  const tagRegex = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi;
+  let match;
+  
+  while ((match = tagRegex.exec(code)) !== null) {
+    const fullTag = match[0];
+    const tagName = match[1];
+    
+    // Skip self-closing tags
+    if (fullTag.endsWith('/>') || ['img', 'br', 'hr', 'input', 'meta', 'link'].includes(tagName)) {
+      continue;
+    }
+    
+    if (!fullTag.startsWith('</')) {
+      openTags.push(tagName);
+    } else {
+      const lastOpenTag = openTags.pop();
+      if (lastOpenTag !== tagName) {
+        errors.push(`Mismatched tag: ${lastOpenTag} is not closed properly`);
+      }
+    }
+  }
+  
+  if (openTags.length > 0) {
+    errors.push(`Unclosed tags: ${openTags.join(', ')}`);
+  }
+  
+  return errors;
+};
 
 const CodeEditor = () => {
   const [htmlCode, setHtmlCode] = useState(DEFAULT_HTML);
@@ -121,7 +162,16 @@ const CodeEditor = () => {
   const [jsCode, setJsCode] = useState(DEFAULT_JS);
   const [output, setOutput] = useState('');
   const [activeTab, setActiveTab] = useState('html');
+  const [errors, setErrors] = useState<string[]>([]);
+  const [projectName, setProjectName] = useState('My EduWarn Project');
+  
   const isMobile = useIsMobile();
+
+  // Validate the HTML code whenever it changes
+  useEffect(() => {
+    const newErrors = validateHTML(htmlCode);
+    setErrors(newErrors);
+  }, [htmlCode]);
 
   // Generate the output
   const generateOutput = () => {
@@ -139,6 +189,12 @@ const CodeEditor = () => {
       </html>
     `;
     setOutput(outputContent);
+    
+    toast({
+      title: "Code Executed",
+      description: errors.length > 0 ? "Warning: Code executed with errors" : "Code executed successfully",
+      variant: errors.length > 0 ? "destructive" : "default"
+    });
   };
 
   // Reset to default code
@@ -216,6 +272,56 @@ const CodeEditor = () => {
     });
   };
 
+  // Save the project
+  const saveProject = () => {
+    const project = {
+      name: projectName,
+      html: htmlCode,
+      css: cssCode,
+      js: jsCode,
+      timestamp: new Date().toISOString()
+    };
+    
+    localStorage.setItem('eduwarnProject', JSON.stringify(project));
+    
+    toast({
+      title: "Project Saved",
+      description: `Project "${projectName}" has been saved locally.`,
+    });
+  };
+
+  // Load the project
+  const loadProject = () => {
+    const savedProject = localStorage.getItem('eduwarnProject');
+    
+    if (savedProject) {
+      try {
+        const project = JSON.parse(savedProject);
+        setHtmlCode(project.html || DEFAULT_HTML);
+        setCssCode(project.css || DEFAULT_CSS);
+        setJsCode(project.js || DEFAULT_JS);
+        setProjectName(project.name || 'My EduWarn Project');
+        
+        toast({
+          title: "Project Loaded",
+          description: `Project "${project.name}" has been loaded.`,
+        });
+      } catch (error) {
+        toast({
+          title: "Error Loading Project",
+          description: "The saved project could not be loaded.",
+          variant: "destructive"
+        });
+      }
+    } else {
+      toast({
+        title: "No Saved Project",
+        description: "No saved project was found.",
+        variant: "destructive"
+      });
+    }
+  };
+
   // Run the code
   useEffect(() => {
     generateOutput();
@@ -259,7 +365,7 @@ const CodeEditor = () => {
                   <CodeMirror
                     value={htmlCode}
                     height="100%"
-                    extensions={[htmlLanguage(), editorTheme, oneDark]}
+                    extensions={[html(), editorTheme]}
                     onChange={setHtmlCode}
                     className="code-mirror border"
                   />
@@ -268,7 +374,7 @@ const CodeEditor = () => {
                   <CodeMirror
                     value={cssCode}
                     height="100%"
-                    extensions={[cssLanguage(), editorTheme, oneDark]}
+                    extensions={[css(), editorTheme]}
                     onChange={setCssCode}
                     className="code-mirror border"
                   />
@@ -277,7 +383,7 @@ const CodeEditor = () => {
                   <CodeMirror
                     value={jsCode}
                     height="100%"
-                    extensions={[jsLanguage(), editorTheme, oneDark]}
+                    extensions={[javascript(), editorTheme]}
                     onChange={setJsCode}
                     className="code-mirror border"
                   />
@@ -285,7 +391,7 @@ const CodeEditor = () => {
               </div>
             </Tabs>
 
-            <div className="p-4 flex space-x-2">
+            <div className="p-4 flex flex-wrap gap-2">
               <Button variant="default" size="sm" onClick={generateOutput} className="flex-1">
                 <Play className="h-4 w-4 mr-1" />
                 Run
@@ -300,6 +406,12 @@ const CodeEditor = () => {
               <Button variant="outline" size="sm" onClick={downloadCode}>
                 <Download className="h-4 w-4" />
               </Button>
+              <Button variant="outline" size="sm" onClick={saveProject}>
+                <Save className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="sm" onClick={loadProject}>
+                <Upload className="h-4 w-4" />
+              </Button>
             </div>
 
             <div className="flex-1 p-4 pt-0">
@@ -312,6 +424,9 @@ const CodeEditor = () => {
                 />
               </div>
             </div>
+            
+            {/* Status Bar */}
+            <EditorStatusBar errors={errors} activeTab={activeTab} />
           </div>
         ) : (
           // Desktop Layout
@@ -345,7 +460,7 @@ const CodeEditor = () => {
                     <CodeMirror
                       value={htmlCode}
                       height="100%"
-                      extensions={[htmlLanguage(), editorTheme, oneDark]}
+                      extensions={[html(), editorTheme]}
                       onChange={setHtmlCode}
                       className="code-mirror border"
                     />
@@ -354,7 +469,7 @@ const CodeEditor = () => {
                     <CodeMirror
                       value={cssCode}
                       height="100%"
-                      extensions={[cssLanguage(), editorTheme, oneDark]}
+                      extensions={[css(), editorTheme]}
                       onChange={setCssCode}
                       className="code-mirror border"
                     />
@@ -363,7 +478,7 @@ const CodeEditor = () => {
                     <CodeMirror
                       value={jsCode}
                       height="100%"
-                      extensions={[jsLanguage(), editorTheme, oneDark]}
+                      extensions={[javascript(), editorTheme]}
                       onChange={setJsCode}
                       className="code-mirror border"
                     />
@@ -387,7 +502,18 @@ const CodeEditor = () => {
                     <Download className="h-4 w-4 mr-1" />
                     Download
                   </Button>
+                  <Button variant="outline" size="sm" onClick={saveProject}>
+                    <Save className="h-4 w-4 mr-1" />
+                    Save
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={loadProject}>
+                    <Upload className="h-4 w-4 mr-1" />
+                    Load
+                  </Button>
                 </div>
+                
+                {/* Status Bar */}
+                <EditorStatusBar errors={errors} activeTab={activeTab} />
               </Tabs>
             </ResizablePanel>
             

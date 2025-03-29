@@ -62,11 +62,13 @@
   overflow: auto;
   font-family: 'JetBrains Mono', monospace;
   border-radius: 0.5rem;
+  color: #000;
 }
 
 .cm-editor {
   height: 100% !important;
   outline: none !important;
+  color: #000 !important;
 }
 
 .cm-scroller {
@@ -75,4 +77,34 @@
 
 .cm-focused {
   outline: none !important;
+}
+
+/* Add styles for syntax highlighting with dark text on light background */
+.cm-line {
+  color: #000 !important;
+}
+
+.cm-comment {
+  color: #0e7490 !important;
+}
+
+.cm-keyword, .cm-tag {
+  color: #7c3aed !important;
+  font-weight: bold;
+}
+
+.cm-string {
+  color: #166534 !important;
+}
+
+.cm-number {
+  color: #c2410c !important;
+}
+
+.cm-property {
+  color: #0369a1 !important;
+}
+
+.cm-punctuation, .cm-bracket {
+  color: #334155 !important;
 }
