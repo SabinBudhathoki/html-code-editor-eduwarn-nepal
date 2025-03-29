@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -24,6 +25,19 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				editor: {
+					bg: '#282a36',
+					text: '#f8fafc',
+					line: '#44475a',
+					comment: '#6272a4',
+					red: '#ff5555',
+					orange: '#ffb86c',
+					yellow: '#f1fa8c',
+					green: '#50fa7b',
+					purple: '#bd93f9',
+					cyan: '#8be9fd',
+					pink: '#ff79c6'
+				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
