@@ -102,51 +102,51 @@ const CodeEditor = () => {
     }
     
     downloadFile(content, filename);
-    
     toast({
-      title: "File Downloaded",
-      description: `${filename} has been downloaded.`,
+      title: "Download Started",
+      description: `${filename} is being downloaded.`,
     });
   };
 
-  // Save the project
+  // Save project to localStorage
   const saveProject = () => {
     const project = {
-      name: projectName,
-      html: htmlCode,
-      css: cssCode,
-      js: jsCode,
-      timestamp: new Date().toISOString()
+      projectName,
+      htmlCode,
+      cssCode,
+      jsCode,
+      lastSaved: new Date().toISOString()
     };
     
-    localStorage.setItem('eduwarnProject', JSON.stringify(project));
-    
+    localStorage.setItem('eduwarn-project', JSON.stringify(project));
     toast({
       title: "Project Saved",
-      description: `Project "${projectName}" has been saved locally.`,
+      description: `${projectName} has been saved locally.`,
     });
   };
 
-  // Load the project
+  // Load project from localStorage
   const loadProject = () => {
-    const savedProject = localStorage.getItem('eduwarnProject');
+    const savedProject = localStorage.getItem('eduwarn-project');
     
     if (savedProject) {
       try {
         const project = JSON.parse(savedProject);
-        setHtmlCode(project.html || DEFAULT_HTML);
-        setCssCode(project.css || DEFAULT_CSS);
-        setJsCode(project.js || DEFAULT_JS);
-        setProjectName(project.name || 'My EduWarn Project');
+        setHtmlCode(project.htmlCode);
+        setCssCode(project.cssCode);
+        setJsCode(project.jsCode);
+        if (project.projectName) {
+          setProjectName(project.projectName);
+        }
         
         toast({
           title: "Project Loaded",
-          description: `Project "${project.name}" has been loaded.`,
+          description: `${project.projectName || 'Project'} has been loaded successfully.`,
         });
       } catch (error) {
         toast({
           title: "Error Loading Project",
-          description: "The saved project could not be loaded.",
+          description: "There was an error loading your saved project.",
           variant: "destructive"
         });
       }
@@ -159,17 +159,14 @@ const CodeEditor = () => {
     }
   };
 
-  // Run the code
+  // Generate output on initial load
   useEffect(() => {
     generateOutput();
   }, []);
 
-  // Layout for mobile and desktop
   return (
-    <div className="flex flex-col h-screen bg-background">
-      <EditorHeader />
-      
-      {/* Main Editor Content */}
+    <div className="flex flex-col h-screen">
+      <EditorHeader projectName={projectName} setProjectName={setProjectName} />
       <div className="flex-1 overflow-hidden">
         <EditorLayout
           isMobile={isMobile}
