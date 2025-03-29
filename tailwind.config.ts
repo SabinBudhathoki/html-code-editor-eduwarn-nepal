@@ -38,6 +38,11 @@ export default {
 					cyan: '#8be9fd',
 					pink: '#ff79c6'
 				},
+				nepal: {
+					red: '#C8102E',
+					blue: '#003893',
+					white: '#FFFFFF'
+				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
