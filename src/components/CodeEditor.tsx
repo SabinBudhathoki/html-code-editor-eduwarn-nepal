@@ -1,14 +1,12 @@
-
 import { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { html } from '@codemirror/lang-html';
-import { css } from '@codemirror/lang-css';
-import { javascript } from '@codemirror/lang-javascript';
+import { html as htmlLanguage } from '@codemirror/lang-html';
+import { css as cssLanguage } from '@codemirror/lang-css';
+import { javascript as jsLanguage } from '@codemirror/lang-javascript';
 import { EditorView } from '@codemirror/view';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Resizable } from '@/components/ui/resizable';
 import { 
   ResizableHandle, 
   ResizablePanel, 
@@ -118,9 +116,9 @@ const editorTheme = EditorView.theme({
 });
 
 const CodeEditor = () => {
-  const [html, setHtml] = useState(DEFAULT_HTML);
-  const [css, setCss] = useState(DEFAULT_CSS);
-  const [js, setJs] = useState(DEFAULT_JS);
+  const [htmlCode, setHtmlCode] = useState(DEFAULT_HTML);
+  const [cssCode, setCssCode] = useState(DEFAULT_CSS);
+  const [jsCode, setJsCode] = useState(DEFAULT_JS);
   const [output, setOutput] = useState('');
   const [activeTab, setActiveTab] = useState('html');
   const isMobile = useIsMobile();
@@ -132,11 +130,11 @@ const CodeEditor = () => {
       <!DOCTYPE html>
       <html>
         <head>
-          <style>${css}</style>
+          <style>${cssCode}</style>
         </head>
         <body>
-          ${html.replace(/<html>|<\/html>|<head>.*<\/head>|<body>|<\/body>|<!DOCTYPE html>/gs, '')}
-          <script>${js}</script>
+          ${htmlCode.replace(/<html>|<\/html>|<head>.*<\/head>|<body>|<\/body>|<!DOCTYPE html>/gs, '')}
+          <script>${jsCode}</script>
         </body>
       </html>
     `;
@@ -145,9 +143,9 @@ const CodeEditor = () => {
 
   // Reset to default code
   const resetEditor = () => {
-    setHtml(DEFAULT_HTML);
-    setCss(DEFAULT_CSS);
-    setJs(DEFAULT_JS);
+    setHtmlCode(DEFAULT_HTML);
+    setCssCode(DEFAULT_CSS);
+    setJsCode(DEFAULT_JS);
     toast({
       title: "Editor Reset",
       description: "All code has been reset to default examples.",
@@ -160,13 +158,13 @@ const CodeEditor = () => {
     
     switch(activeTab) {
       case 'html':
-        codeToCopy = html;
+        codeToCopy = htmlCode;
         break;
       case 'css':
-        codeToCopy = css;
+        codeToCopy = cssCode;
         break;
       case 'js':
-        codeToCopy = js;
+        codeToCopy = jsCode;
         break;
       default:
         return;
@@ -187,15 +185,15 @@ const CodeEditor = () => {
     
     switch(activeTab) {
       case 'html':
-        content = html;
+        content = htmlCode;
         filename = 'index.html';
         break;
       case 'css':
-        content = css;
+        content = cssCode;
         filename = 'styles.css';
         break;
       case 'js':
-        content = js;
+        content = jsCode;
         filename = 'script.js';
         break;
       default:
@@ -259,28 +257,28 @@ const CodeEditor = () => {
               <div className="flex-1 p-4 overflow-auto">
                 <TabsContent value="html" className="h-full m-0">
                   <CodeMirror
-                    value={html}
+                    value={htmlCode}
                     height="100%"
-                    extensions={[html(), editorTheme, oneDark]}
-                    onChange={setHtml}
+                    extensions={[htmlLanguage(), editorTheme, oneDark]}
+                    onChange={setHtmlCode}
                     className="code-mirror border"
                   />
                 </TabsContent>
                 <TabsContent value="css" className="h-full m-0">
                   <CodeMirror
-                    value={css}
+                    value={cssCode}
                     height="100%"
-                    extensions={[css(), editorTheme, oneDark]}
-                    onChange={setCss}
+                    extensions={[cssLanguage(), editorTheme, oneDark]}
+                    onChange={setCssCode}
                     className="code-mirror border"
                   />
                 </TabsContent>
                 <TabsContent value="js" className="h-full m-0">
                   <CodeMirror
-                    value={js}
+                    value={jsCode}
                     height="100%"
-                    extensions={[javascript(), editorTheme, oneDark]}
-                    onChange={setJs}
+                    extensions={[jsLanguage(), editorTheme, oneDark]}
+                    onChange={setJsCode}
                     className="code-mirror border"
                   />
                 </TabsContent>
@@ -345,28 +343,28 @@ const CodeEditor = () => {
                 <div className="flex-1 p-4 overflow-auto">
                   <TabsContent value="html" className="h-full m-0">
                     <CodeMirror
-                      value={html}
+                      value={htmlCode}
                       height="100%"
-                      extensions={[html(), editorTheme, oneDark]}
-                      onChange={setHtml}
+                      extensions={[htmlLanguage(), editorTheme, oneDark]}
+                      onChange={setHtmlCode}
                       className="code-mirror border"
                     />
                   </TabsContent>
                   <TabsContent value="css" className="h-full m-0">
                     <CodeMirror
-                      value={css}
+                      value={cssCode}
                       height="100%"
-                      extensions={[css(), editorTheme, oneDark]}
-                      onChange={setCss}
+                      extensions={[cssLanguage(), editorTheme, oneDark]}
+                      onChange={setCssCode}
                       className="code-mirror border"
                     />
                   </TabsContent>
                   <TabsContent value="js" className="h-full m-0">
                     <CodeMirror
-                      value={js}
+                      value={jsCode}
                       height="100%"
-                      extensions={[javascript(), editorTheme, oneDark]}
-                      onChange={setJs}
+                      extensions={[jsLanguage(), editorTheme, oneDark]}
+                      onChange={setJsCode}
                       className="code-mirror border"
                     />
                   </TabsContent>
