@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import EditorHeader from './EditorHeader';
@@ -10,7 +9,7 @@ import {
   DEFAULT_CSS, 
   DEFAULT_JS 
 } from './editor/EditorConstants';
-import { editorTheme } from './editor/EditorTheme';
+import { getEditorTheme } from './editor/EditorTheme';
 import { generateOutputContent, downloadFile } from './editor/CodeEditorHelpers';
 
 const CodeEditor = () => {
@@ -25,13 +24,11 @@ const CodeEditor = () => {
   
   const isMobile = useIsMobile();
 
-  // Validate the HTML code whenever it changes
   useEffect(() => {
     const newErrors = validateHTML(htmlCode);
     setErrors(newErrors);
   }, [htmlCode]);
 
-  // Generate the output
   const generateOutput = () => {
     const outputContent = generateOutputContent(htmlCode, cssCode, jsCode);
     setOutput(outputContent);
@@ -43,7 +40,6 @@ const CodeEditor = () => {
     });
   };
 
-  // Reset to default code
   const resetEditor = () => {
     setHtmlCode(DEFAULT_HTML);
     setCssCode(DEFAULT_CSS);
@@ -54,7 +50,6 @@ const CodeEditor = () => {
     });
   };
 
-  // Copy code to clipboard
   const copyCode = () => {
     let codeToCopy = '';
     
@@ -79,7 +74,6 @@ const CodeEditor = () => {
     });
   };
 
-  // Download code
   const downloadCode = () => {
     const fileExtension = activeTab === 'js' ? 'js' : activeTab;
     let content = '';
@@ -109,7 +103,6 @@ const CodeEditor = () => {
     });
   };
 
-  // Save project to localStorage
   const saveProject = () => {
     const project = {
       projectName,
@@ -127,7 +120,6 @@ const CodeEditor = () => {
     });
   };
 
-  // Load project from localStorage
   const loadProject = () => {
     const savedProject = localStorage.getItem('eduwarn-project');
     
@@ -164,7 +156,6 @@ const CodeEditor = () => {
     }
   };
 
-  // Generate output on initial load
   useEffect(() => {
     generateOutput();
   }, []);
@@ -186,7 +177,7 @@ const CodeEditor = () => {
           setCssCode={setCssCode}
           jsCode={jsCode}
           setJsCode={setJsCode}
-          editorTheme={editorTheme}
+          editorTheme={getEditorTheme(darkMode)}
           errors={errors}
           output={output}
           generateOutput={generateOutput}
