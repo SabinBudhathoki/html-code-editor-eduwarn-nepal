@@ -21,6 +21,7 @@ const CodeEditor = () => {
   const [activeTab, setActiveTab] = useState('html');
   const [errors, setErrors] = useState<string[]>([]);
   const [projectName, setProjectName] = useState('My EduWarn Project');
+  const [darkMode, setDarkMode] = useState(false);
   
   const isMobile = useIsMobile();
 
@@ -115,6 +116,7 @@ const CodeEditor = () => {
       htmlCode,
       cssCode,
       jsCode,
+      darkMode,
       lastSaved: new Date().toISOString()
     };
     
@@ -137,6 +139,9 @@ const CodeEditor = () => {
         setJsCode(project.jsCode);
         if (project.projectName) {
           setProjectName(project.projectName);
+        }
+        if (project.darkMode !== undefined) {
+          setDarkMode(project.darkMode);
         }
         
         toast({
@@ -165,8 +170,11 @@ const CodeEditor = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen">
-      <EditorHeader projectName={projectName} setProjectName={setProjectName} />
+    <div className={`flex flex-col h-screen ${darkMode ? 'dark' : ''}`}>
+      <EditorHeader 
+        projectName={projectName} 
+        setProjectName={setProjectName} 
+      />
       <div className="flex-1 overflow-hidden">
         <EditorLayout
           isMobile={isMobile}
@@ -187,6 +195,7 @@ const CodeEditor = () => {
           downloadCode={downloadCode}
           saveProject={saveProject}
           loadProject={loadProject}
+          darkMode={darkMode}
         />
       </div>
     </div>

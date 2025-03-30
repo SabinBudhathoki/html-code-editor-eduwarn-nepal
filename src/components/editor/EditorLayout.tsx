@@ -5,6 +5,7 @@ import EditorTabs from './EditorTabs';
 import EditorActionButtons from './EditorActionButtons';
 import EditorPreview from './EditorPreview';
 import EditorStatusBar from '../EditorStatusBar';
+import { getEditorTheme } from './EditorTheme';
 
 interface EditorLayoutProps {
   isMobile: boolean;
@@ -25,6 +26,7 @@ interface EditorLayoutProps {
   downloadCode: () => void;
   saveProject: () => void;
   loadProject: () => void;
+  darkMode: boolean;
 }
 
 const EditorLayout: React.FC<EditorLayoutProps> = ({
@@ -46,10 +48,11 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
   downloadCode,
   saveProject,
   loadProject,
+  darkMode,
 }) => {
   if (isMobile) {
     return (
-      <div className="flex flex-col h-full">
+      <div className={`flex flex-col h-full ${darkMode ? 'dark' : ''}`}>
         <EditorTabs
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -59,7 +62,8 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
           setCssCode={setCssCode}
           jsCode={jsCode}
           setJsCode={setJsCode}
-          editorTheme={editorTheme}
+          editorTheme={getEditorTheme(darkMode)}
+          darkMode={darkMode}
         />
 
         <EditorActionButtons
@@ -82,8 +86,8 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
   }
 
   return (
-    <ResizablePanelGroup direction="horizontal" className="h-full">
-      <ResizablePanel defaultSize={50} minSize={30}>
+    <ResizablePanelGroup direction="horizontal" className={`h-full ${darkMode ? 'dark' : ''}`}>
+      <ResizablePanel defaultSize={50} minSize={30} className={darkMode ? 'bg-gray-800 text-gray-100' : ''}>
         <EditorTabs
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -93,7 +97,8 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
           setCssCode={setCssCode}
           jsCode={jsCode}
           setJsCode={setJsCode}
-          editorTheme={editorTheme}
+          editorTheme={getEditorTheme(darkMode)}
+          darkMode={darkMode}
         />
         
         <EditorActionButtons
@@ -109,9 +114,9 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
         <EditorStatusBar errors={errors} activeTab={activeTab} />
       </ResizablePanel>
       
-      <ResizableHandle withHandle />
+      <ResizableHandle withHandle className={darkMode ? 'bg-gray-700' : ''} />
       
-      <ResizablePanel defaultSize={50} minSize={30}>
+      <ResizablePanel defaultSize={50} minSize={30} className={darkMode ? 'bg-gray-800' : ''}>
         <div className="h-full p-4">
           <EditorPreview output={output} />
         </div>

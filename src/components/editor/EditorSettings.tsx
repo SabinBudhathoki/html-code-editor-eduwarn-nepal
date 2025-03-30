@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { toast } from '@/hooks/use-toast';
 
 interface EditorSettingsProps {
   open: boolean;
@@ -29,6 +30,26 @@ const EditorSettings: React.FC<EditorSettingsProps> = ({
   darkMode,
   setDarkMode,
 }) => {
+  const handleSaveChanges = () => {
+    onOpenChange(false);
+    
+    // Show toast notification
+    toast({
+      title: "Settings Saved",
+      description: "Your editor preferences have been updated.",
+    });
+  };
+
+  const handleDarkModeToggle = (enabled: boolean) => {
+    setDarkMode(enabled);
+    
+    // Show toast for theme change
+    toast({
+      title: enabled ? "Dark Mode Enabled" : "Light Mode Enabled",
+      description: `The editor theme has been switched to ${enabled ? 'dark' : 'light'} mode.`,
+    });
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -54,17 +75,20 @@ const EditorSettings: React.FC<EditorSettingsProps> = ({
             <Label htmlFor="darkMode" className="text-right">
               Dark Mode
             </Label>
-            <div className="col-span-3">
+            <div className="col-span-3 flex items-center gap-2">
               <Switch
                 id="darkMode"
                 checked={darkMode}
-                onCheckedChange={setDarkMode}
+                onCheckedChange={handleDarkModeToggle}
               />
+              <span className="text-sm text-muted-foreground">
+                {darkMode ? 'Enabled' : 'Disabled'}
+              </span>
             </div>
           </div>
         </div>
         <DialogFooter>
-          <Button type="button" onClick={() => onOpenChange(false)}>
+          <Button type="button" onClick={handleSaveChanges}>
             Save Changes
           </Button>
         </DialogFooter>

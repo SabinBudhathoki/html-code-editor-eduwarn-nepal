@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Cog } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -13,6 +13,15 @@ interface EditorHeaderProps {
 const EditorHeader: React.FC<EditorHeaderProps> = ({ projectName, setProjectName }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+
+  // Apply dark mode class to document body
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   return (
     <header className="border-b px-4 py-3 bg-nepal-blue text-nepal-white flex items-center justify-between">

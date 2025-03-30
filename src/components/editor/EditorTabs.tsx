@@ -6,7 +6,6 @@ import CodeMirror from '@uiw/react-codemirror';
 import { html } from '@codemirror/lang-html';
 import { css } from '@codemirror/lang-css';
 import { javascript } from '@codemirror/lang-javascript';
-import { EditorView } from '@codemirror/view';
 
 interface EditorTabsProps {
   activeTab: string;
@@ -18,6 +17,7 @@ interface EditorTabsProps {
   jsCode: string;
   setJsCode: (code: string) => void;
   editorTheme: any;
+  darkMode: boolean;
 }
 
 const EditorTabs: React.FC<EditorTabsProps> = ({
@@ -29,7 +29,8 @@ const EditorTabs: React.FC<EditorTabsProps> = ({
   setCssCode,
   jsCode,
   setJsCode,
-  editorTheme
+  editorTheme,
+  darkMode
 }) => {
   return (
     <Tabs 
@@ -60,27 +61,30 @@ const EditorTabs: React.FC<EditorTabsProps> = ({
           <CodeMirror
             value={htmlCode}
             height="100%"
+            theme={darkMode ? 'dark' : 'light'}
             extensions={[html(), editorTheme]}
             onChange={setHtmlCode}
-            className="code-mirror border"
+            className={`code-mirror border ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
           />
         </TabsContent>
         <TabsContent value="css" className="h-full m-0">
           <CodeMirror
             value={cssCode}
             height="100%"
+            theme={darkMode ? 'dark' : 'light'}
             extensions={[css(), editorTheme]}
             onChange={setCssCode}
-            className="code-mirror border"
+            className={`code-mirror border ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
           />
         </TabsContent>
         <TabsContent value="js" className="h-full m-0">
           <CodeMirror
             value={jsCode}
             height="100%"
+            theme={darkMode ? 'dark' : 'light'}
             extensions={[javascript(), editorTheme]}
             onChange={setJsCode}
-            className="code-mirror border"
+            className={`code-mirror border ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
           />
         </TabsContent>
       </div>

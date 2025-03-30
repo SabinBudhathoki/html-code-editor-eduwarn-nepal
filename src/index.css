@@ -44,6 +44,36 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
 }
 
 @layer base {
@@ -62,13 +92,11 @@
   overflow: auto;
   font-family: 'JetBrains Mono', monospace;
   border-radius: 0.5rem;
-  color: #000;
 }
 
 .cm-editor {
   height: 100% !important;
   outline: none !important;
-  color: #000 !important;
 }
 
 .cm-scroller {
@@ -79,32 +107,75 @@
   outline: none !important;
 }
 
-/* Add styles for syntax highlighting with dark text on light background */
-.cm-line {
+/* Light mode theme */
+:root:not(.dark) .cm-line {
   color: #000 !important;
 }
 
-.cm-comment {
+:root:not(.dark) .cm-comment {
   color: #0e7490 !important;
 }
 
-.cm-keyword, .cm-tag {
+:root:not(.dark) .cm-keyword, 
+:root:not(.dark) .cm-tag {
   color: #7c3aed !important;
   font-weight: bold;
 }
 
-.cm-string {
+:root:not(.dark) .cm-string {
   color: #166534 !important;
 }
 
-.cm-number {
+:root:not(.dark) .cm-number {
   color: #c2410c !important;
 }
 
-.cm-property {
+:root:not(.dark) .cm-property {
   color: #0369a1 !important;
 }
 
-.cm-punctuation, .cm-bracket {
+:root:not(.dark) .cm-punctuation, 
+:root:not(.dark) .cm-bracket {
   color: #334155 !important;
+}
+
+/* Dark mode theme */
+.dark .cm-line {
+  color: #e2e8f0 !important;
+}
+
+.dark .cm-comment {
+  color: #7dd3fc !important;
+}
+
+.dark .cm-keyword,
+.dark .cm-tag {
+  color: #c4b5fd !important;
+  font-weight: bold;
+}
+
+.dark .cm-string {
+  color: #86efac !important;
+}
+
+.dark .cm-number {
+  color: #fdba74 !important;
+}
+
+.dark .cm-property {
+  color: #67e8f9 !important;
+}
+
+.dark .cm-punctuation,
+.dark .cm-bracket {
+  color: #cbd5e1 !important;
+}
+
+.dark .cm-editor {
+  background-color: #1e1e2e !important;
+}
+
+.dark .cm-gutters {
+  background-color: #1e1e2e !important;
+  color: #7f849c !important;
 }
