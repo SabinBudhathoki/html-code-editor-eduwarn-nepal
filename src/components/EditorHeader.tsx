@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Cog, AlertTriangle } from 'lucide-react';
+import { Cog } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import EditorSettings from './editor/EditorSettings';
@@ -17,7 +17,11 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({ projectName, setProjectName
   return (
     <header className="border-b px-4 py-3 bg-nepal-blue text-nepal-white flex items-center justify-between">
       <div className="flex items-center space-x-2">
-        <AlertTriangle className="h-6 w-6 text-nepal-white" />
+        <img 
+          src="/lovable-uploads/db5f63ca-2708-43a8-a1f7-d74fe2c94987.png" 
+          alt="EduWarn Logo" 
+          className="h-10 w-10"
+        />
         <div className="flex flex-col">
           <h1 className="text-xl font-bold tracking-tight">
             <span className="text-nepal-white">Code Editor</span>
