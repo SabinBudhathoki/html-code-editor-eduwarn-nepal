@@ -77,7 +77,7 @@ const InterstitialAd: React.FC<InterstitialAdProps> = ({
       )}
       
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[600px] sm:max-h-[80vh]" showClose={false}>
+        <DialogContent className="sm:max-w-[600px] sm:max-h-[80vh]">
           <div className="flex justify-between items-center mb-4">
             <div className="text-sm text-gray-500">
               Ad closes in {countdown} seconds
