@@ -3,6 +3,13 @@
  * Utility for managing ads in the application
  */
 
+// Define window.adsbygoogle property
+declare global {
+  interface Window {
+    adsbygoogle?: any[];
+  }
+}
+
 // Check if user has opted out of personalized ads (GDPR compliance)
 const hasOptedOut = (): boolean => {
   return localStorage.getItem('ad-opt-out') === 'true';
@@ -22,7 +29,6 @@ const optIn = (): void => {
 const refreshAds = (): void => {
   if (typeof window !== 'undefined' && window.adsbygoogle) {
     try {
-      // @ts-ignore - adsbygoogle is added by the external script
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (error) {
       console.error('Failed to refresh ads:', error);

@@ -19,6 +19,25 @@
     
     <!-- Google AdSense Script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    
+    <!-- Google AdMob SDK for mobile ads -->
+    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+    <script>
+      window.googletag = window.googletag || {cmd: []};
+      googletag.cmd.push(function() {
+        // Define ad slots for different formats
+        googletag.defineSlot('/XXXXXXXXX/banner', [[320, 50], [728, 90]], 'banner-ad')
+          .addService(googletag.pubads());
+        googletag.defineSlot('/XXXXXXXXX/interstitial', [1, 1], 'interstitial-ad')
+          .addService(googletag.pubads());
+        googletag.defineSlot('/XXXXXXXXX/native', ['fluid'], 'native-ad')
+          .addService(googletag.pubads());
+          
+        // Enable services
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+      });
+    </script>
   </head>
 
   <body>

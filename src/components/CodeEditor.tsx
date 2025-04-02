@@ -6,6 +6,10 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import EditorLayout from './editor/EditorLayout';
 import { validateHTML } from '@/utils/codeValidation';
 import AdBanner from './ads/AdBanner';
+import PopupAd from './ads/PopupAd';
+import InterstitialAd from './ads/InterstitialAd';
+import StickyAd from './ads/StickyAd';
+import NativeAd from './ads/NativeAd';
 import { 
   DEFAULT_HTML, 
   DEFAULT_CSS, 
@@ -169,6 +173,9 @@ const CodeEditor = () => {
         setProjectName={setProjectName} 
       />
       
+      {/* Top Sticky Ad */}
+      <StickyAd position="top" adSlot="1234567890" />
+      
       {/* Top Ad Banner */}
       <AdBanner format="horizontal" className="my-2" />
       
@@ -196,8 +203,17 @@ const CodeEditor = () => {
         />
       </div>
       
+      {/* Native Ad integrated in content */}
+      <NativeAd className="mx-4" adSlot="2345678901" />
+      
       {/* Bottom Ad Banner */}
-      <AdBanner format="horizontal" className="my-2" />
+      <AdBanner format="rectangle" className="my-2" />
+      
+      {/* Popup Ad with 15 seconds delay */}
+      <PopupAd delayInSeconds={15} adSlot="3456789012" />
+      
+      {/* Interstitial Ad that triggers when action is performed */}
+      <InterstitialAd triggerOnAction={false} adSlot="4567890123" />
     </div>
   );
 };

@@ -39,7 +39,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ format = 'horizontal', className = 
   
   return (
     <div className={`ad-container my-4 mx-auto ${className}`}>
-      <ins
+      <div
         ref={adRef}
         className="adsbygoogle"
         style={{ display: 'block', width, height }}
