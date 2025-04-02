@@ -5,6 +5,11 @@ import EditorHeader from './EditorHeader';
 import { useIsMobile } from '@/hooks/use-mobile';
 import EditorLayout from './editor/EditorLayout';
 import { validateHTML } from '@/utils/codeValidation';
+import AdBanner from './ads/AdBanner';
+import PopupAd from './ads/PopupAd';
+import InterstitialAd from './ads/InterstitialAd';
+import StickyAd from './ads/StickyAd';
+import NativeAd from './ads/NativeAd';
 import { 
   DEFAULT_HTML, 
   DEFAULT_CSS, 
@@ -168,7 +173,13 @@ const CodeEditor = () => {
         setProjectName={setProjectName} 
       />
       
-      <div className="flex-1 overflow-hidden">
+      {/* Top Sticky Ad - positioned absolutely to avoid taking vertical space */}
+      <div className="relative z-10">
+        <StickyAd position="top" adSlot="1234567890" />
+      </div>
+      
+      {/* Main content with full height preserved */}
+      <div className="flex-1 overflow-hidden relative">
         <EditorLayout
           isMobile={isMobile}
           activeTab={activeTab}
@@ -190,7 +201,19 @@ const CodeEditor = () => {
           loadProject={loadProject}
           darkMode={darkMode}
         />
+        
+        {/* Floating ads that don't reduce the coding area size */}
+        <div className="absolute bottom-4 right-4 z-10 pointer-events-none">
+          <div className="pointer-events-auto">
+            <NativeAd className="mb-4 max-w-[300px]" adSlot="2345678901" />
+            <AdBanner format="rectangle" className="mb-4" />
+          </div>
+        </div>
       </div>
+      
+      {/* Popup and Interstitial ads (these don't affect layout) */}
+      <PopupAd delayInSeconds={15} adSlot="3456789012" />
+      <InterstitialAd triggerOnAction={false} adSlot="4567890123" />
     </div>
   );
 };
