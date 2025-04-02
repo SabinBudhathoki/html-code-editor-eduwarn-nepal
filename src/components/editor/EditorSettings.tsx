@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { toast } from '@/hooks/use-toast';
+import { adManager } from '@/utils/adManager';
 
 interface EditorSettingsProps {
   open: boolean;
@@ -30,6 +31,8 @@ const EditorSettings: React.FC<EditorSettingsProps> = ({
   darkMode,
   setDarkMode,
 }) => {
+  const [personalizedAds, setPersonalizedAds] = React.useState(!adManager.hasOptedOut());
+
   const handleSaveChanges = () => {
     onOpenChange(false);
     
@@ -47,6 +50,20 @@ const EditorSettings: React.FC<EditorSettingsProps> = ({
     toast({
       title: enabled ? "Dark Mode Enabled" : "Light Mode Enabled",
       description: `The editor theme has been switched to ${enabled ? 'dark' : 'light'} mode.`,
+    });
+  };
+
+  const handleAdPreferenceToggle = (enabled: boolean) => {
+    setPersonalizedAds(enabled);
+    if (enabled) {
+      adManager.optIn();
+    } else {
+      adManager.optOut();
+    }
+    
+    toast({
+      title: "Ad Preferences Updated",
+      description: `Personalized ads have been ${enabled ? 'enabled' : 'disabled'}.`,
     });
   };
 
@@ -83,6 +100,21 @@ const EditorSettings: React.FC<EditorSettingsProps> = ({
               />
               <span className="text-sm text-muted-foreground">
                 {darkMode ? 'Enabled' : 'Disabled'}
+              </span>
+            </div>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="adPreferences" className="text-right">
+              Personalized Ads
+            </Label>
+            <div className="col-span-3 flex items-center gap-2">
+              <Switch
+                id="adPreferences"
+                checked={personalizedAds}
+                onCheckedChange={handleAdPreferenceToggle}
+              />
+              <span className="text-sm text-muted-foreground">
+                {personalizedAds ? 'Enabled' : 'Disabled'}
               </span>
             </div>
           </div>

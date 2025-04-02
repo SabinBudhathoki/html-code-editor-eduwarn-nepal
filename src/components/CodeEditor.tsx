@@ -1,9 +1,11 @@
+
 import { useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import EditorHeader from './EditorHeader';
 import { useIsMobile } from '@/hooks/use-mobile';
 import EditorLayout from './editor/EditorLayout';
 import { validateHTML } from '@/utils/codeValidation';
+import AdBanner from './ads/AdBanner';
 import { 
   DEFAULT_HTML, 
   DEFAULT_CSS, 
@@ -166,6 +168,10 @@ const CodeEditor = () => {
         projectName={projectName} 
         setProjectName={setProjectName} 
       />
+      
+      {/* Top Ad Banner */}
+      <AdBanner format="horizontal" className="my-2" />
+      
       <div className="flex-1 overflow-hidden">
         <EditorLayout
           isMobile={isMobile}
@@ -189,6 +195,9 @@ const CodeEditor = () => {
           darkMode={darkMode}
         />
       </div>
+      
+      {/* Bottom Ad Banner */}
+      <AdBanner format="horizontal" className="my-2" />
     </div>
   );
 };
