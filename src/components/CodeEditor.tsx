@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import EditorHeader from './EditorHeader';
@@ -173,10 +172,7 @@ const CodeEditor = () => {
         setProjectName={setProjectName} 
       />
       
-      {/* Top Sticky Ad - positioned absolutely to avoid taking vertical space */}
-      <div className="relative z-10">
-        <StickyAd position="top" adSlot="1234567890" />
-      </div>
+      {/* Removed the top Sticky Ad */}
       
       {/* Main content with full height preserved */}
       <div className="flex-1 overflow-hidden relative">
