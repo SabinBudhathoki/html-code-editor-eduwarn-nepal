@@ -1,5 +1,6 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { adManager } from '@/utils/adManager';
 
 interface AdBannerProps {
   format?: 'horizontal' | 'vertical' | 'rectangle';
@@ -8,19 +9,17 @@ interface AdBannerProps {
 
 const AdBanner: React.FC<AdBannerProps> = ({ format = 'horizontal', className = '' }) => {
   const adRef = useRef<HTMLDivElement>(null);
+  const [adUnitId] = useState(() => adManager.generateAdUnitId('7965843261', 'banner'));
   
   useEffect(() => {
-    // Only execute in production to avoid errors during development
-    if (process.env.NODE_ENV === 'production' && adRef.current) {
-      try {
-        // @ts-ignore - Adsense is added globally by the script in index.html
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        console.log('Ad requested');
-      } catch (error) {
-        console.error('Error loading ad:', error);
-      }
-    }
-  }, []);
+    if (adManager.hasOptedOut() || !adRef.current) return;
+    
+    const timeoutId = setTimeout(() => {
+      adManager.initializeAdUnit(adUnitId);
+    }, 200);
+    
+    return () => clearTimeout(timeoutId);
+  }, [adUnitId]);
   
   // Determine ad size based on format
   const getAdSize = () => {
@@ -43,10 +42,11 @@ const AdBanner: React.FC<AdBannerProps> = ({ format = 'horizontal', className = 
         ref={adRef}
         className="adsbygoogle"
         style={{ display: 'block', width, height }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-        data-ad-slot="XXXXXXXXXX"
+        data-ad-client="ca-pub-6362499040977235"
+        data-ad-slot="7965843261"
         data-ad-format="auto"
         data-full-width-responsive="true"
+        id={adUnitId}
       />
     </div>
   );

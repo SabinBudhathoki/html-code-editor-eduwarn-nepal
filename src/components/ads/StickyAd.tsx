@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import { adManager } from '@/utils/adManager';
 
@@ -10,23 +10,21 @@ interface StickyAdProps {
 
 const StickyAd: React.FC<StickyAdProps> = ({ 
   position = 'bottom',
-  adSlot = "XXXXXXXXXX"
+  adSlot = "8743922654"
 }) => {
   const [dismissed, setDismissed] = React.useState(false);
   const adRef = useRef<HTMLDivElement>(null);
+  const [adUnitId] = useState(() => adManager.generateAdUnitId(adSlot, 'sticky'));
   
   useEffect(() => {
-    if (adManager.hasOptedOut() || dismissed) return;
+    if (adManager.hasOptedOut() || dismissed || !adRef.current) return;
     
-    if (adRef.current && typeof window !== 'undefined') {
-      try {
-        // @ts-ignore - Adsense is added globally
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (error) {
-        console.error('Error loading sticky ad:', error);
-      }
-    }
-  }, [dismissed]);
+    const timeoutId = setTimeout(() => {
+      adManager.initializeAdUnit(adUnitId);
+    }, 300);
+    
+    return () => clearTimeout(timeoutId);
+  }, [adUnitId, dismissed]);
   
   if (dismissed || adManager.hasOptedOut()) return null;
   
@@ -50,10 +48,11 @@ const StickyAd: React.FC<StickyAdProps> = ({
             ref={adRef}
             className="adsbygoogle"
             style={{ display: 'block', width: '728px', height: '90px' }}
-            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+            data-ad-client="ca-pub-6362499040977235"
             data-ad-slot={adSlot}
             data-ad-format="auto"
             data-full-width-responsive="true"
+            id={adUnitId}
           />
         </div>
       </div>

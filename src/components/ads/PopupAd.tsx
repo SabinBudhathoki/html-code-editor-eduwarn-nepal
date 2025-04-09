@@ -1,11 +1,12 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { adManager } from '@/utils/adManager';
@@ -17,10 +18,12 @@ interface PopupAdProps {
 
 const PopupAd: React.FC<PopupAdProps> = ({ 
   delayInSeconds = 10,
-  adSlot = "XXXXXXXXXX" 
+  adSlot = "3214569871" 
 }) => {
   const [open, setOpen] = useState(false);
-  const adRef = React.useRef<HTMLDivElement>(null);
+  const adRef = useRef<HTMLDivElement>(null);
+  const [adUnitId] = useState(() => adManager.generateAdUnitId(adSlot, 'popup'));
+  const adInitialized = useRef(false);
 
   useEffect(() => {
     // Only show popup if user hasn't opted out of ads
@@ -34,25 +37,23 @@ const PopupAd: React.FC<PopupAdProps> = ({
       
       // Load ad after dialog opens
       setTimeout(() => {
-        if (adRef.current && typeof window !== 'undefined') {
-          try {
-            // @ts-ignore - Adsense is added globally
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-          } catch (error) {
-            console.error('Error loading popup ad:', error);
-          }
+        if (adRef.current && !adInitialized.current) {
+          adInitialized.current = adManager.initializeAdUnit(adUnitId);
         }
       }, 500);
     }, delayInSeconds * 1000);
 
     return () => clearTimeout(timer);
-  }, [delayInSeconds]);
+  }, [delayInSeconds, adUnitId]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Special Offer</DialogTitle>
+          <DialogDescription>
+            Check out this special offer selected just for you!
+          </DialogDescription>
         </DialogHeader>
         
         <div className="my-4 flex justify-center">
@@ -60,8 +61,9 @@ const PopupAd: React.FC<PopupAdProps> = ({
             ref={adRef}
             className="adsbygoogle"
             style={{ display: 'block', width: '300px', height: '250px' }}
-            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+            data-ad-client="ca-pub-6362499040977235"
             data-ad-slot={adSlot}
+            id={adUnitId}
           />
         </div>
         

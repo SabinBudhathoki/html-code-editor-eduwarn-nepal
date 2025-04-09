@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { adManager } from '@/utils/adManager';
 
 interface NativeAdProps {
@@ -9,22 +9,20 @@ interface NativeAdProps {
 
 const NativeAd: React.FC<NativeAdProps> = ({ 
   className = '',
-  adSlot = "XXXXXXXXXX"
+  adSlot = "6875697584"
 }) => {
   const adRef = useRef<HTMLDivElement>(null);
+  const [adUnitId] = useState(() => adManager.generateAdUnitId(adSlot, 'native'));
   
   useEffect(() => {
-    if (adManager.hasOptedOut()) return;
+    if (adManager.hasOptedOut() || !adRef.current) return;
     
-    if (adRef.current && typeof window !== 'undefined') {
-      try {
-        // @ts-ignore - Adsense is added globally
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (error) {
-        console.error('Error loading native ad:', error);
-      }
-    }
-  }, []);
+    const timeoutId = setTimeout(() => {
+      adManager.initializeAdUnit(adUnitId);
+    }, 100);
+    
+    return () => clearTimeout(timeoutId);
+  }, [adUnitId]);
   
   if (adManager.hasOptedOut()) return null;
   
@@ -35,10 +33,11 @@ const NativeAd: React.FC<NativeAdProps> = ({
         ref={adRef}
         className="adsbygoogle"
         style={{ display: 'block', width: '100%', height: '150px' }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+        data-ad-client="ca-pub-6362499040977235"
         data-ad-slot={adSlot}
         data-ad-format="fluid"
         data-ad-layout-key="-fb+5w+4e-db+86"
+        id={adUnitId}
       />
     </div>
   );

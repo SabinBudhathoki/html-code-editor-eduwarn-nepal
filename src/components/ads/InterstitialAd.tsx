@@ -1,8 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { adManager } from '@/utils/adManager';
@@ -15,12 +18,14 @@ interface InterstitialAdProps {
 
 const InterstitialAd: React.FC<InterstitialAdProps> = ({ 
   triggerOnAction = false,
-  adSlot = "XXXXXXXXXX",
+  adSlot = "5436781922",
   countdownSeconds = 5
 }) => {
   const [open, setOpen] = useState(false);
   const [countdown, setCountdown] = useState(countdownSeconds);
-  const adRef = React.useRef<HTMLDivElement>(null);
+  const adRef = useRef<HTMLDivElement>(null);
+  const [adUnitId] = useState(() => adManager.generateAdUnitId(adSlot, 'interstitial'));
+  const adInitialized = useRef(false);
 
   // Function to show the interstitial ad
   const showAd = () => {
@@ -31,13 +36,8 @@ const InterstitialAd: React.FC<InterstitialAdProps> = ({
     
     // Load ad after dialog opens
     setTimeout(() => {
-      if (adRef.current && typeof window !== 'undefined') {
-        try {
-          // @ts-ignore - Adsense is added globally
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (error) {
-          console.error('Error loading interstitial ad:', error);
-        }
+      if (adRef.current && !adInitialized.current) {
+        adInitialized.current = adManager.initializeAdUnit(adUnitId);
       }
     }, 300);
   };
@@ -78,6 +78,13 @@ const InterstitialAd: React.FC<InterstitialAdProps> = ({
       
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[600px] sm:max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>Advertisement</DialogTitle>
+            <DialogDescription>
+              This advertisement helps support our platform.
+            </DialogDescription>
+          </DialogHeader>
+
           <div className="flex justify-between items-center mb-4">
             <div className="text-sm text-gray-500">
               Ad closes in {countdown} seconds
@@ -94,8 +101,9 @@ const InterstitialAd: React.FC<InterstitialAdProps> = ({
               ref={adRef}
               className="adsbygoogle"
               style={{ display: 'block', width: '336px', height: '280px' }}
-              data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+              data-ad-client="ca-pub-6362499040977235"
               data-ad-slot={adSlot}
+              id={adUnitId}
             />
           </div>
         </DialogContent>
