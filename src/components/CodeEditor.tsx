@@ -172,9 +172,6 @@ const CodeEditor = () => {
         setProjectName={setProjectName} 
       />
       
-      {/* Removed the top Sticky Ad */}
-      
-      {/* Main content with full height preserved */}
       <div className="flex-1 overflow-hidden relative">
         <EditorLayout
           isMobile={isMobile}
@@ -198,16 +195,13 @@ const CodeEditor = () => {
           darkMode={darkMode}
         />
         
-        {/* Floating ads that don't reduce the coding area size */}
         <div className="absolute bottom-4 right-4 z-10 pointer-events-none">
           <div className="pointer-events-auto">
-            <NativeAd className="mb-4 max-w-[300px]" adSlot="2345678901" />
             <AdBanner format="rectangle" className="mb-4" />
           </div>
         </div>
       </div>
       
-      {/* Popup and Interstitial ads (these don't affect layout) */}
       <PopupAd delayInSeconds={15} adSlot="3456789012" />
       <InterstitialAd triggerOnAction={false} adSlot="4567890123" />
     </div>
