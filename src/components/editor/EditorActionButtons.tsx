@@ -1,7 +1,9 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Play, RotateCcw, Copy, Download, Save, Upload } from 'lucide-react';
+import { Play, RotateCcw, Copy, Download, Save, Upload, RefreshCw } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 interface EditorActionButtonsProps {
   generateOutput: () => void;
@@ -11,6 +13,8 @@ interface EditorActionButtonsProps {
   saveProject: () => void;
   loadProject: () => void;
   isMobile: boolean;
+  autoUpdate?: boolean;
+  setAutoUpdate?: (auto: boolean) => void;
 }
 
 const EditorActionButtons: React.FC<EditorActionButtonsProps> = ({
@@ -20,7 +24,9 @@ const EditorActionButtons: React.FC<EditorActionButtonsProps> = ({
   downloadCode,
   saveProject,
   loadProject,
-  isMobile
+  isMobile,
+  autoUpdate = true,
+  setAutoUpdate
 }) => {
   if (isMobile) {
     return (
@@ -45,12 +51,23 @@ const EditorActionButtons: React.FC<EditorActionButtonsProps> = ({
         <Button variant="outline" size="sm" onClick={loadProject}>
           <Upload className="h-4 w-4" />
         </Button>
+        {setAutoUpdate && (
+          <div className="flex items-center space-x-2 ml-2 mt-2 w-full">
+            <Switch
+              id="auto-update-mobile"
+              checked={autoUpdate}
+              onCheckedChange={setAutoUpdate}
+              size="sm"
+            />
+            <Label htmlFor="auto-update-mobile" className="text-xs">Auto-update</Label>
+          </div>
+        )}
       </div>
     );
   }
 
   return (
-    <div className="p-4 flex space-x-2">
+    <div className="p-4 flex items-center space-x-2">
       <Button variant="default" size="sm" onClick={generateOutput} className="flex-1">
         <Play className="h-4 w-4 mr-1" />
         Run
@@ -75,6 +92,18 @@ const EditorActionButtons: React.FC<EditorActionButtonsProps> = ({
         <Upload className="h-4 w-4 mr-1" />
         Load
       </Button>
+      
+      {setAutoUpdate && (
+        <div className="flex items-center space-x-2 ml-2">
+          <Switch
+            id="auto-update"
+            checked={autoUpdate}
+            onCheckedChange={setAutoUpdate}
+            size="sm"
+          />
+          <Label htmlFor="auto-update" className="text-xs">Auto-update</Label>
+        </div>
+      )}
     </div>
   );
 };

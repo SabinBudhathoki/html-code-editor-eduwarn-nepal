@@ -27,6 +27,8 @@ interface EditorLayoutProps {
   saveProject: () => void;
   loadProject: () => void;
   darkMode: boolean;
+  autoUpdate?: boolean;
+  setAutoUpdate?: (auto: boolean) => void;
 }
 
 const EditorLayout: React.FC<EditorLayoutProps> = ({
@@ -49,6 +51,8 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
   saveProject,
   loadProject,
   darkMode,
+  autoUpdate = true,
+  setAutoUpdate,
 }) => {
   if (isMobile) {
     return (
@@ -74,6 +78,8 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
           saveProject={saveProject}
           loadProject={loadProject}
           isMobile={isMobile}
+          autoUpdate={autoUpdate}
+          setAutoUpdate={setAutoUpdate}
         />
 
         <div className="flex-1 p-4 pt-0">
@@ -109,6 +115,8 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
           saveProject={saveProject}
           loadProject={loadProject}
           isMobile={isMobile}
+          autoUpdate={autoUpdate}
+          setAutoUpdate={setAutoUpdate}
         />
         
         <EditorStatusBar errors={errors} activeTab={activeTab} />

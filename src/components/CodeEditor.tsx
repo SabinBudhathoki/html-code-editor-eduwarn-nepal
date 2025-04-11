@@ -26,6 +26,7 @@ const CodeEditor = () => {
   const [errors, setErrors] = useState<string[]>([]);
   const [projectName, setProjectName] = useState('My EduWarn Project');
   const [darkMode, setDarkMode] = useState(false);
+  const [autoUpdate, setAutoUpdate] = useState(true);
   
   const isMobile = useIsMobile();
 
@@ -34,15 +35,27 @@ const CodeEditor = () => {
     setErrors(newErrors);
   }, [htmlCode]);
 
-  const generateOutput = () => {
+  useEffect(() => {
+    if (autoUpdate) {
+      const timeoutId = setTimeout(() => {
+        generateOutput(false);
+      }, 1000);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [htmlCode, cssCode, jsCode, autoUpdate]);
+
+  const generateOutput = (showToast = true) => {
     const outputContent = generateOutputContent(htmlCode, cssCode, jsCode);
     setOutput(outputContent);
     
-    toast({
-      title: "Code Executed",
-      description: errors.length > 0 ? "Warning: Code executed with errors" : "Code executed successfully",
-      variant: errors.length > 0 ? "destructive" : "default"
-    });
+    if (showToast) {
+      toast({
+        title: "Code Executed",
+        description: errors.length > 0 ? "Warning: Code executed with errors" : "Code executed successfully",
+        variant: errors.length > 0 ? "destructive" : "default"
+      });
+    }
   };
 
   const resetEditor = () => {
@@ -162,7 +175,7 @@ const CodeEditor = () => {
   };
 
   useEffect(() => {
-    generateOutput();
+    generateOutput(false);
   }, []);
 
   return (
@@ -193,6 +206,8 @@ const CodeEditor = () => {
           saveProject={saveProject}
           loadProject={loadProject}
           darkMode={darkMode}
+          autoUpdate={autoUpdate}
+          setAutoUpdate={setAutoUpdate}
         />
         
         <div className="absolute bottom-4 right-4 z-10 pointer-events-none">
