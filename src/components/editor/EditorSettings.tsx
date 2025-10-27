@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Dialog,
@@ -11,8 +10,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
-import { adManager } from '@/utils/adManager';
 
 interface EditorSettingsProps {
   open: boolean;
@@ -31,12 +30,9 @@ const EditorSettings: React.FC<EditorSettingsProps> = ({
   darkMode,
   setDarkMode,
 }) => {
-  const [personalizedAds, setPersonalizedAds] = React.useState(!adManager.hasOptedOut());
-
   const handleSaveChanges = () => {
     onOpenChange(false);
-    
-    // Show toast notification
+
     toast({
       title: "Settings Saved",
       description: "Your editor preferences have been updated.",
@@ -45,25 +41,10 @@ const EditorSettings: React.FC<EditorSettingsProps> = ({
 
   const handleDarkModeToggle = (enabled: boolean) => {
     setDarkMode(enabled);
-    
-    // Show toast for theme change
+
     toast({
       title: enabled ? "Dark Mode Enabled" : "Light Mode Enabled",
       description: `The editor theme has been switched to ${enabled ? 'dark' : 'light'} mode.`,
-    });
-  };
-
-  const handleAdPreferenceToggle = (enabled: boolean) => {
-    setPersonalizedAds(enabled);
-    if (enabled) {
-      adManager.optIn();
-    } else {
-      adManager.optOut();
-    }
-    
-    toast({
-      title: "Ad Preferences Updated",
-      description: `Personalized ads have been ${enabled ? 'enabled' : 'disabled'}.`,
     });
   };
 
@@ -73,50 +54,35 @@ const EditorSettings: React.FC<EditorSettingsProps> = ({
         <DialogHeader>
           <DialogTitle>Editor Settings</DialogTitle>
           <DialogDescription>
-            Customize your EduWarn HTML editor experience.
+            Customize your code editor experience.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="projectName" className="text-right">
+        <div className="grid gap-6 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="projectName">
               Project Name
             </Label>
-            <input
+            <Input
               id="projectName"
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
-              className="col-span-3 px-3 py-2 border rounded-md"
+              placeholder="Enter project name"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="darkMode" className="text-right">
-              Dark Mode
-            </Label>
-            <div className="col-span-3 flex items-center gap-2">
-              <Switch
-                id="darkMode"
-                checked={darkMode}
-                onCheckedChange={handleDarkModeToggle}
-              />
-              <span className="text-sm text-muted-foreground">
-                {darkMode ? 'Enabled' : 'Disabled'}
-              </span>
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label htmlFor="darkMode">
+                Dark Mode
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Enable dark theme for the editor
+              </p>
             </div>
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="adPreferences" className="text-right">
-              Personalized Ads
-            </Label>
-            <div className="col-span-3 flex items-center gap-2">
-              <Switch
-                id="adPreferences"
-                checked={personalizedAds}
-                onCheckedChange={handleAdPreferenceToggle}
-              />
-              <span className="text-sm text-muted-foreground">
-                {personalizedAds ? 'Enabled' : 'Disabled'}
-              </span>
-            </div>
+            <Switch
+              id="darkMode"
+              checked={darkMode}
+              onCheckedChange={handleDarkModeToggle}
+            />
           </div>
         </div>
         <DialogFooter>

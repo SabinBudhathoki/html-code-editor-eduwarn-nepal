@@ -3,19 +3,13 @@ import { toast } from '@/hooks/use-toast';
 import EditorHeader from './EditorHeader';
 import { useIsMobile } from '@/hooks/use-mobile';
 import EditorLayout from './editor/EditorLayout';
-import { validateHTML } from '@/utils/codeValidation';
-import AdBanner from './ads/AdBanner';
-import PopupAd from './ads/PopupAd';
-import InterstitialAd from './ads/InterstitialAd';
-import StickyAd from './ads/StickyAd';
-import NativeAd from './ads/NativeAd';
-import { 
-  DEFAULT_HTML, 
-  DEFAULT_CSS, 
-  DEFAULT_JS 
+import {
+  DEFAULT_HTML,
+  DEFAULT_CSS,
+  DEFAULT_JS
 } from './editor/EditorConstants';
 import { getEditorTheme } from './editor/EditorTheme';
-import { generateOutputContent, downloadFile } from './editor/CodeEditorHelpers';
+import { generateOutputContent, downloadFile, validateHTML } from './editor/CodeEditorHelpers';
 
 const CodeEditor = () => {
   const [htmlCode, setHtmlCode] = useState(DEFAULT_HTML);
@@ -180,12 +174,14 @@ const CodeEditor = () => {
 
   return (
     <div className={`flex flex-col h-screen ${darkMode ? 'dark' : ''}`}>
-      <EditorHeader 
-        projectName={projectName} 
-        setProjectName={setProjectName} 
+      <EditorHeader
+        projectName={projectName}
+        setProjectName={setProjectName}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
       />
-      
-      <div className="flex-1 overflow-hidden relative">
+
+      <div className="flex-1 overflow-hidden">
         <EditorLayout
           isMobile={isMobile}
           activeTab={activeTab}
@@ -209,16 +205,7 @@ const CodeEditor = () => {
           autoUpdate={autoUpdate}
           setAutoUpdate={setAutoUpdate}
         />
-        
-        <div className="absolute bottom-4 right-4 z-10 pointer-events-none">
-          <div className="pointer-events-auto">
-            <AdBanner format="rectangle" className="mb-4" />
-          </div>
-        </div>
       </div>
-      
-      <PopupAd delayInSeconds={15} adSlot="3456789012" />
-      <InterstitialAd triggerOnAction={false} adSlot="4567890123" />
     </div>
   );
 };

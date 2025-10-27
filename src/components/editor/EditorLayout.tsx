@@ -56,7 +56,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
 }) => {
   if (isMobile) {
     return (
-      <div className={`flex flex-col h-full ${darkMode ? 'dark' : ''}`}>
+      <div className={`flex flex-col h-full bg-white dark:bg-gray-900 ${darkMode ? 'dark' : ''}`}>
         <EditorTabs
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -82,18 +82,18 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
           setAutoUpdate={setAutoUpdate}
         />
 
-        <div className="flex-1 p-4 pt-0">
+        <div className="flex-1 p-4 bg-gray-50 dark:bg-gray-900">
           <EditorPreview output={output} />
         </div>
-        
+
         <EditorStatusBar errors={errors} activeTab={activeTab} />
       </div>
     );
   }
 
   return (
-    <ResizablePanelGroup direction="horizontal" className={`h-full ${darkMode ? 'dark' : ''}`}>
-      <ResizablePanel defaultSize={50} minSize={30} className={darkMode ? 'bg-gray-800 text-gray-100' : ''}>
+    <ResizablePanelGroup direction="horizontal" className={`h-full bg-gray-50 dark:bg-gray-900 ${darkMode ? 'dark' : ''}`}>
+      <ResizablePanel defaultSize={50} minSize={30} className="flex flex-col">
         <EditorTabs
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -106,7 +106,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
           editorTheme={getEditorTheme(darkMode)}
           darkMode={darkMode}
         />
-        
+
         <EditorActionButtons
           generateOutput={generateOutput}
           resetEditor={resetEditor}
@@ -118,13 +118,13 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
           autoUpdate={autoUpdate}
           setAutoUpdate={setAutoUpdate}
         />
-        
+
         <EditorStatusBar errors={errors} activeTab={activeTab} />
       </ResizablePanel>
-      
-      <ResizableHandle withHandle className={darkMode ? 'bg-gray-700' : ''} />
-      
-      <ResizablePanel defaultSize={50} minSize={30} className={darkMode ? 'bg-gray-800' : ''}>
+
+      <ResizableHandle withHandle className="bg-gray-200 dark:bg-gray-700 hover:bg-blue-400 dark:hover:bg-blue-600 transition-colors w-1" />
+
+      <ResizablePanel defaultSize={50} minSize={30} className="bg-gray-50 dark:bg-gray-900">
         <div className="h-full p-4">
           <EditorPreview output={output} />
         </div>

@@ -33,30 +33,30 @@ const EditorTabs: React.FC<EditorTabsProps> = ({
   darkMode
 }) => {
   return (
-    <Tabs 
-      defaultValue="html" 
-      className="w-full h-full flex flex-col" 
-      value={activeTab} 
+    <Tabs
+      defaultValue="html"
+      className="w-full h-full flex flex-col"
+      value={activeTab}
       onValueChange={setActiveTab}
     >
-      <div className="px-4 pt-2">
-        <TabsList className="w-full grid grid-cols-3">
-          <TabsTrigger value="html" className="flex items-center gap-1">
+      <div className="px-4 pt-4 pb-2 bg-white dark:bg-gray-900">
+        <TabsList className="w-full grid grid-cols-3 bg-gray-100 dark:bg-gray-800">
+          <TabsTrigger value="html" className="flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">
             <Code2 className="h-4 w-4" />
-            <span>HTML</span>
+            <span className="font-medium">HTML</span>
           </TabsTrigger>
-          <TabsTrigger value="css" className="flex items-center gap-1">
+          <TabsTrigger value="css" className="flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">
             <Palette className="h-4 w-4" />
-            <span>CSS</span>
+            <span className="font-medium">CSS</span>
           </TabsTrigger>
-          <TabsTrigger value="js" className="flex items-center gap-1">
+          <TabsTrigger value="js" className="flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">
             <FileCode2 className="h-4 w-4" />
-            <span>JS</span>
+            <span className="font-medium">JS</span>
           </TabsTrigger>
         </TabsList>
       </div>
-      
-      <div className="flex-1 p-4 overflow-auto">
+
+      <div className="flex-1 px-4 pb-4 overflow-auto bg-white dark:bg-gray-900">
         <TabsContent value="html" className="h-full m-0">
           <CodeMirror
             value={htmlCode}
@@ -64,7 +64,7 @@ const EditorTabs: React.FC<EditorTabsProps> = ({
             theme={darkMode ? 'dark' : 'light'}
             extensions={[html(), editorTheme]}
             onChange={setHtmlCode}
-            className={`code-mirror border ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
+            className={`code-mirror rounded-lg border overflow-hidden shadow-sm ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
           />
         </TabsContent>
         <TabsContent value="css" className="h-full m-0">
@@ -74,7 +74,7 @@ const EditorTabs: React.FC<EditorTabsProps> = ({
             theme={darkMode ? 'dark' : 'light'}
             extensions={[css(), editorTheme]}
             onChange={setCssCode}
-            className={`code-mirror border ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
+            className={`code-mirror rounded-lg border overflow-hidden shadow-sm ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
           />
         </TabsContent>
         <TabsContent value="js" className="h-full m-0">
@@ -84,7 +84,7 @@ const EditorTabs: React.FC<EditorTabsProps> = ({
             theme={darkMode ? 'dark' : 'light'}
             extensions={[javascript(), editorTheme]}
             onChange={setJsCode}
-            className={`code-mirror border ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
+            className={`code-mirror rounded-lg border overflow-hidden shadow-sm ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
           />
         </TabsContent>
       </div>

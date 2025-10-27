@@ -30,36 +30,37 @@ const EditorActionButtons: React.FC<EditorActionButtonsProps> = ({
 }) => {
   if (isMobile) {
     return (
-      <div className="p-4 flex flex-wrap gap-2">
-        <Button variant="default" size="sm" onClick={generateOutput} className="flex-1">
-          <Play className="h-4 w-4 mr-1" />
-          Run
-        </Button>
-        <Button variant="outline" size="sm" onClick={resetEditor} className="flex-1">
-          <RotateCcw className="h-4 w-4 mr-1" />
-          Reset
-        </Button>
-        <Button variant="outline" size="sm" onClick={copyCode}>
-          <Copy className="h-4 w-4" />
-        </Button>
-        <Button variant="outline" size="sm" onClick={downloadCode}>
-          <Download className="h-4 w-4" />
-        </Button>
-        <Button variant="outline" size="sm" onClick={saveProject}>
-          <Save className="h-4 w-4" />
-        </Button>
-        <Button variant="outline" size="sm" onClick={loadProject}>
-          <Upload className="h-4 w-4" />
-        </Button>
+      <div className="p-4 bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-700">
+        <div className="flex flex-wrap gap-2">
+          <Button variant="default" size="sm" onClick={generateOutput} className="flex-1 bg-blue-600 hover:bg-blue-700">
+            <Play className="h-4 w-4 mr-1" />
+            Run
+          </Button>
+          <Button variant="outline" size="sm" onClick={resetEditor} className="flex-1">
+            <RotateCcw className="h-4 w-4 mr-1" />
+            Reset
+          </Button>
+          <Button variant="outline" size="sm" onClick={copyCode}>
+            <Copy className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="sm" onClick={downloadCode}>
+            <Download className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="sm" onClick={saveProject}>
+            <Save className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="sm" onClick={loadProject}>
+            <Upload className="h-4 w-4" />
+          </Button>
+        </div>
         {setAutoUpdate && (
-          <div className="flex items-center space-x-2 ml-2 mt-2 w-full">
+          <div className="flex items-center space-x-2 mt-3 pt-3 border-t dark:border-gray-700">
             <Switch
               id="auto-update-mobile"
               checked={autoUpdate}
               onCheckedChange={setAutoUpdate}
-              size="sm"
             />
-            <Label htmlFor="auto-update-mobile" className="text-xs">Auto-update</Label>
+            <Label htmlFor="auto-update-mobile" className="text-sm cursor-pointer">Auto-update preview</Label>
           </div>
         )}
       </div>
@@ -67,41 +68,44 @@ const EditorActionButtons: React.FC<EditorActionButtonsProps> = ({
   }
 
   return (
-    <div className="p-4 flex items-center space-x-2">
-      <Button variant="default" size="sm" onClick={generateOutput} className="flex-1">
-        <Play className="h-4 w-4 mr-1" />
-        Run
-      </Button>
-      <Button variant="outline" size="sm" onClick={resetEditor}>
-        <RotateCcw className="h-4 w-4 mr-1" />
-        Reset
-      </Button>
-      <Button variant="outline" size="sm" onClick={copyCode}>
-        <Copy className="h-4 w-4 mr-1" />
-        Copy
-      </Button>
-      <Button variant="outline" size="sm" onClick={downloadCode}>
-        <Download className="h-4 w-4 mr-1" />
-        Download
-      </Button>
-      <Button variant="outline" size="sm" onClick={saveProject}>
-        <Save className="h-4 w-4 mr-1" />
-        Save
-      </Button>
-      <Button variant="outline" size="sm" onClick={loadProject}>
-        <Upload className="h-4 w-4 mr-1" />
-        Load
-      </Button>
-      
+    <div className="p-4 bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-700 flex items-center justify-between gap-3">
+      <div className="flex items-center gap-2">
+        <Button variant="default" size="sm" onClick={generateOutput} className="bg-blue-600 hover:bg-blue-700">
+          <Play className="h-4 w-4 mr-1" />
+          Run Code
+        </Button>
+        <Button variant="outline" size="sm" onClick={resetEditor}>
+          <RotateCcw className="h-4 w-4 mr-1" />
+          Reset
+        </Button>
+        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-1" />
+        <Button variant="ghost" size="sm" onClick={copyCode}>
+          <Copy className="h-4 w-4 mr-1" />
+          Copy
+        </Button>
+        <Button variant="ghost" size="sm" onClick={downloadCode}>
+          <Download className="h-4 w-4 mr-1" />
+          Download
+        </Button>
+        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-1" />
+        <Button variant="ghost" size="sm" onClick={saveProject}>
+          <Save className="h-4 w-4 mr-1" />
+          Save
+        </Button>
+        <Button variant="ghost" size="sm" onClick={loadProject}>
+          <Upload className="h-4 w-4 mr-1" />
+          Load
+        </Button>
+      </div>
+
       {setAutoUpdate && (
-        <div className="flex items-center space-x-2 ml-2">
+        <div className="flex items-center space-x-2">
           <Switch
             id="auto-update"
             checked={autoUpdate}
             onCheckedChange={setAutoUpdate}
-            size="sm"
           />
-          <Label htmlFor="auto-update" className="text-xs">Auto-update</Label>
+          <Label htmlFor="auto-update" className="text-sm cursor-pointer">Auto-update preview</Label>
         </div>
       )}
     </div>
